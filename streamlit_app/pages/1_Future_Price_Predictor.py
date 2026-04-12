@@ -3,9 +3,21 @@ import streamlit as st
 import pandas as pd
 import dagshub
 import os
+import json
 from dotenv import load_dotenv
 
+#----------------------------------------------------------------------
+# Load the dataset
+#----------------------------------------------------------------------
 
+dataframe = pd.read_csv("data/Future_Price.csv")
+
+
+
+
+# ----------------------------------------------------------------------
+# Initialize DagsHub connection and MLflow tracking
+# ----------------------------------------------------------------------
 dagshub.init(
   repo_owner='JS-Tharun', 
   repo_name='Real-Estate-Investment-Advisor', 
@@ -17,38 +29,23 @@ load_dotenv()
 os.environ['MLFLOW_TRACKING_USERNAME'] = f"{os.getenv('DAGSHUB_USERNAME')}"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = f"{os.getenv('DAGSHUB_PASSWORD')}"
 
-dataframe = pd.read_csv("data/Future_Price.csv")
-feature_score ={
-    'Price_per_SqFt_in_Lakhs': 1.0,
-    'BHK': 2.0,
-    'City': 3.0,
-    'Total_Nearby_Schools': 4.0,
-    'Garden': 5.0,
-    'Property_Type': 6.0,
-    'Public_Transport_Accessibility': 7.0,
-    'Floor_No': 8.0,
-    'Size_in_SqFt': 9.0,
-    'Security': 10.0,
-    'Total_Nearby_Hospitals': 11.0,
-    'Playground': 12.0,
-    'Locality': 13.0,
-    'Total_Floors': 14.0,
-    'Pool': 15.0,
-    'Furnished_Status': 16.0,
-    'Availability_Status': 16.0,
-    'Direction_Facing': 16.0,
-    'Age_of_Property': 16.0,
-    'Owner_Type': 16.0,
-    'Parking_Space': 16.0,
-    'Clubhouse': 16.0,
-    'Gym': 16.0
-}
-feature_df = pd.DataFrame(list(feature_score.items()), columns=["Feature", "Ranking"])
 
 
+
+
+# ----------------------------------------------------------------------
+# Load the champion model from MLflow
+# ----------------------------------------------------------------------
 prod_model = "Future_Price_Predictor-Prod"
 model_uri = f"models:/{prod_model}@champion"
 loaded_model = mlflow.pyfunc.load_model(model_uri)
+
+
+
+
+#----------------------------------------------------------------------
+# Streamlit App Configuration
+#----------------------------------------------------------------------
 
 st.set_page_config(
     page_title="Future Property Price Prediction",
@@ -251,10 +248,13 @@ with st.form("Price Prediction Form"):
                     "Pool": swimming_pool_selection
                 }])
 
+                # -----------------------------------------------------------------------
+                # Prediction using production model
+                # -----------------------------------------------------------------------
+
                 mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
                 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
-                
                 y_pred = loaded_model.predict(X)
 
                 # Display prediction prominently
@@ -264,6 +264,16 @@ with st.form("Price Prediction Form"):
                 with st.expander("View Input Summary"):
                     st.write("**Input Features:**")
                     st.dataframe(X.T, use_container_width=True)
+
+
+# ----------------------------------------------------------------------
+# Display Feature Importance
+# ----------------------------------------------------------------------
+
+with open('data/reg_feature_score.json', 'r') as file:
+    feature_data = json.load(file)
+
+feature_df = pd.DataFrame(list(feature_data.items()), columns=["Feature", "Ranking"])
 
 with st.container(border=True):
     st.subheader("📊 Feature Importance")
