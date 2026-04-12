@@ -13,9 +13,6 @@ from dotenv import load_dotenv
 
 dataframe = pd.read_csv("data/Future_Price.csv")
 
-
-
-
 # ----------------------------------------------------------------------
 # Initialize DagsHub connection and MLflow tracking
 # ----------------------------------------------------------------------
@@ -51,7 +48,6 @@ def load_champion_model():
 with st.spinner("Loading Models...."):
     loaded_models = load_champion_model()
 
-
 #----------------------------------------------------------------------
 # Streamlit App Configuration
 #----------------------------------------------------------------------
@@ -61,13 +57,15 @@ st.set_page_config(
     layout="wide"
 )
 
-with st.container(border=False):
-    st.title("Future Property Price Predictor")
-    st.markdown("Enter the property details below to predict the future price.")
+# Main container for structured layout
+with st.container():
+    st.title("🔮 Future Property Price Predictor")
+    st.markdown("Enter the property details below to predict the future price. Use the form to input information and get predictions.")
 
+# Form container with grid-based layout
 with st.form("Price Prediction Form"):
-    # Location Section
-    with st.container():
+    # Location Section - Card-like container
+    with st.container(border=True):
         st.subheader("📍 Location Details")
         col1, col2 = st.columns(2)
         with col1:
@@ -83,8 +81,10 @@ with st.form("Price Prediction Form"):
                 options=locality_values
             )
 
-    # Property Details Section
-    with st.container():
+    st.markdown("")  # Spacer
+
+    # Property Details Section - Card-like container
+    with st.container(border=True):
         st.subheader("🏠 Property Details")
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -168,8 +168,10 @@ with st.form("Price Prediction Form"):
                 options=availability_values
             )
 
-    # Amenities Section
-    with st.container():
+    st.markdown("")  # Spacer
+
+    # Amenities Section - Card-like container
+    with st.container(border=True):
         st.subheader("🏊 Amenities")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -196,8 +198,10 @@ with st.form("Price Prediction Form"):
             swimming_pool = st.toggle(label="Swimming Pool")
             swimming_pool_selection = (1 if swimming_pool else 0)
 
-    # Nearby Facilities Section
-    with st.container():
+    st.markdown("")  # Spacer
+
+    # Nearby Facilities Section - Card-like container
+    with st.container(border=True):
         st.subheader("🏥 Nearby Facilities")
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -221,77 +225,80 @@ with st.form("Price Prediction Form"):
                 options=public_transport_score_selection
             )
 
-    # Submit Button
-    st.markdown("---")
+    st.markdown("")  # Spacer
+
+    # Submit Button - Centered in a row
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
         submit_button = st.form_submit_button(label="🔮 Predict Future Price", use_container_width=True)
 
-    if submit_button:
-        with st.container():
-            st.subheader("🔮 Prediction Results")
-            with st.spinner("Predicting future price..."):
-                X = pd.DataFrame([{
-                    "City": city_selection,
-                    "Locality": locality_selection,
-                    "Property_Type": property_type_selection,
-                    "BHK": bhk_selection,
-                    "Size_in_SqFt": size_selection,
-                    "Price_per_SqFt_in_Lakhs": price_per_sqft_selection,
-                    "Furnished_Status": furnishing_status_selection,
-                    "Direction_Facing": direction_selection,
-                    "Floor_No": floor_selection,
-                    "Total_Floors": total_floors_selection,
-                    "Age_of_Property": age_selection,
-                    "Owner_Type": owner_type_selection,
-                    "Availability_Status": availability_selection,
-                    "Total_Nearby_Schools": total_schools_selection,
-                    "Total_Nearby_Hospitals": total_hospitals_selection,
-                    "Public_Transport_Accessibility": public_transport_score_selection,
-                    "Parking_Space": parking_space_selection,
-                    "Security": security_selection,
-                    "Clubhouse": clubhouse_selection,
-                    "Garden": gardens_selection,
-                    "Gym": gym_selection,
-                    "Playground": play_area_selection,
-                    "Pool": swimming_pool_selection
-                }])
+# Prediction Results - Outside form, in a container
+if submit_button:
+    with st.container(border=True):
+        st.subheader("🔮 Prediction Results")
+        with st.spinner("Predicting future price..."):
+            X = pd.DataFrame([{
+                "City": city_selection,
+                "Locality": locality_selection,
+                "Property_Type": property_type_selection,
+                "BHK": bhk_selection,
+                "Size_in_SqFt": size_selection,
+                "Price_per_SqFt_in_Lakhs": price_per_sqft_selection,
+                "Furnished_Status": furnishing_status_selection,
+                "Direction_Facing": direction_selection,
+                "Floor_No": floor_selection,
+                "Total_Floors": total_floors_selection,
+                "Age_of_Property": age_selection,
+                "Owner_Type": owner_type_selection,
+                "Availability_Status": availability_selection,
+                "Total_Nearby_Schools": total_schools_selection,
+                "Total_Nearby_Hospitals": total_hospitals_selection,
+                "Public_Transport_Accessibility": public_transport_score_selection,
+                "Parking_Space": parking_space_selection,
+                "Security": security_selection,
+                "Clubhouse": clubhouse_selection,
+                "Garden": gardens_selection,
+                "Gym": gym_selection,
+                "Playground": play_area_selection,
+                "Pool": swimming_pool_selection
+            }])
 
-                # -----------------------------------------------------------------------
-                # Prediction using production model
-                # -----------------------------------------------------------------------
+            # -----------------------------------------------------------------------
+            # Prediction using production model
+            # -----------------------------------------------------------------------
 
-                mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
-                mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
+            mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
+            mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
-                predictions = []
-                for model in loaded_models:
-                    y_pred = model.predict(X)
-                    predictions.append(y_pred)
+            predictions = []
+            for model in loaded_models:
+                y_pred = model.predict(X)
+                predictions.append(y_pred)
 
-                mean_pred = np.mean(predictions, axis=0)
-                std_dev = np.std(predictions, axis=0)
+            mean_pred = np.mean(predictions, axis=0)
+            std_dev = np.std(predictions, axis=0)
 
-                confidence = 1 / (1 + (std_dev / mean_pred))
-                lower = mean_pred - 2 * std_dev
-                upper = mean_pred + 2 * std_dev
+            confidence = 1 / (1 + (std_dev / mean_pred))
+            lower = mean_pred - 2 * std_dev
+            upper = mean_pred + 2 * std_dev
 
-                def confidence_label(conf):
-                    if conf > 0.8:
-                        return "High"
-                    elif conf > 0.6:
-                        return "Medium"
-                    else:
-                        return "Low"
+            def confidence_label(conf):
+                if conf > 0.8:
+                    return "High"
+                elif conf > 0.6:
+                    return "Medium"
+                else:
+                    return "Low"
 
-                conf_value = float(confidence[0])
-                conf_pct = round(conf_value * 100, 2)
-                conf_tier = confidence_label(conf_value)
+            conf_value = float(confidence[0])
+            conf_pct = round(conf_value * 100, 2)
+            conf_tier = confidence_label(conf_value)
 
-                st.success(f"**Predicted Future Price: ₹{mean_pred[0]:,.2f} Lakhs**")
-                st.info(f"**Confidence: {conf_tier} ({conf_pct}%)**")
-                st.warning(f"**Expected Price Interval: ₹{lower[0]:,.2f} - ₹{upper[0]:,.2f} Lakhs**")
+            st.success(f"**Predicted Future Price: ₹{mean_pred[0]:,.2f} Lakhs**")
+            st.info(f"**Confidence: {conf_tier} ({conf_pct}%)**")
+            st.warning(f"**Expected Price Interval: ₹{lower[0]:,.2f} - ₹{upper[0]:,.2f} Lakhs**")
 
+st.markdown("")  # Spacer
 
 # ----------------------------------------------------------------------
 # Display Feature Importance
