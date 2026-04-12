@@ -4,6 +4,7 @@ import pandas as pd
 import dagshub
 import os
 import json
+import numpy as np
 from dotenv import load_dotenv
 
 #----------------------------------------------------------------------
@@ -29,18 +30,26 @@ load_dotenv()
 os.environ['MLFLOW_TRACKING_USERNAME'] = f"{os.getenv('DAGSHUB_USERNAME')}"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = f"{os.getenv('DAGSHUB_PASSWORD')}"
 
-
-
-
+mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
+mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
 # ----------------------------------------------------------------------
-# Load the champion model from MLflow
+# Load the champion model from MLflow and cache it for Streamlit
 # ----------------------------------------------------------------------
-prod_model = "Future_Price_Predictor-Prod"
-model_uri = f"models:/{prod_model}@champion"
-loaded_model = mlflow.pyfunc.load_model(model_uri)
 
+@st.cache_resource
+def load_champion_model():
+    prod_model = ["XGBoost_Price_Pred", "RF_Price_Pred_Prod", "DT_Price_Pred_Prod"]
+    models = []
 
+    for model in prod_model:
+        model_uri = f"models:/{model}@champion"
+        loaded_model = mlflow.pyfunc.load_model(model_uri)
+        models.append(loaded_model)
+    return models
+
+with st.spinner("Loading Models...."):
+    loaded_models = load_champion_model()
 
 
 #----------------------------------------------------------------------
@@ -255,15 +264,33 @@ with st.form("Price Prediction Form"):
                 mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
                 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
-                y_pred = loaded_model.predict(X)
+                predictions = []
+                for model in loaded_models:
+                    y_pred = model.predict(X)
+                    predictions.append(y_pred)
 
-                # Display prediction prominently
-                st.success(f"**Predicted Future Price: ₹{y_pred[0]:,.2f} Lakhs**")
+                mean_pred = np.mean(predictions, axis=0)
+                std_dev = np.std(predictions, axis=0)
 
-                # Show input summary in an expander
-                with st.expander("View Input Summary"):
-                    st.write("**Input Features:**")
-                    st.dataframe(X.T, use_container_width=True)
+                confidence = 1 / (1 + (std_dev / mean_pred))
+                lower = mean_pred - 2 * std_dev
+                upper = mean_pred + 2 * std_dev
+
+                def confidence_label(conf):
+                    if conf > 0.8:
+                        return "High"
+                    elif conf > 0.6:
+                        return "Medium"
+                    else:
+                        return "Low"
+
+                conf_value = float(confidence[0])
+                conf_pct = round(conf_value * 100, 2)
+                conf_tier = confidence_label(conf_value)
+
+                st.success(f"**Predicted Future Price: ₹{mean_pred[0]:,.2f} Lakhs**")
+                st.info(f"**Confidence: {conf_tier} ({conf_pct}%)**")
+                st.warning(f"**Expected Price Interval: ₹{lower[0]:,.2f} - ₹{upper[0]:,.2f} Lakhs**")
 
 
 # ----------------------------------------------------------------------
