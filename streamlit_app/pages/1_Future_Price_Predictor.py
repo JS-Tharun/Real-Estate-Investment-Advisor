@@ -264,7 +264,7 @@ if submit_button:
             }])
 
             # -----------------------------------------------------------------------
-            # Prediction using production model
+            # Prediction using production models
             # -----------------------------------------------------------------------
 
             mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
