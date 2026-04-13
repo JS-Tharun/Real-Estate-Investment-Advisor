@@ -312,3 +312,5 @@ feature_df = pd.DataFrame(list(feature_data.items()), columns=["Feature", "Ranki
 with st.container(border=True):
     st.subheader("📊 Feature Importance")
     st.dataframe(feature_df)
+
+
