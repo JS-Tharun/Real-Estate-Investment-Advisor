@@ -11,15 +11,33 @@ def sidebar_filters():
     df = filter_load_data()
 
     st.write("# Filters")
+
     st.write("## Location Filters")
     state_filter(df)
     city_filter(df[df['State'] == filter.get('State', df['State'].iloc[0])])
     locality_filter(df)
+
     st.divider()
     st.write("## Property Details")
-    property_type_filter(df)
-    bhk_filter(df)
+    price_filter()
     size_filter()
+    bhk_filter(df)
+    property_type_filter(df)
+    year_built_filter(df)
+    total_floors_filter(df)
+
+    st.divider()
+    st.write("## Nearby Amenities")
+    school_filter(df)
+    hospital_filter(df)
+    public_transport_filter(df)
+
+    st.divider()
+    st.write("## Amenities")
+
+    
+    
+    
     
 
 def state_filter(df):
@@ -51,12 +69,12 @@ def locality_filter(df):
 
 def property_type_filter(df):
     property_type_options = sorted(df['Property_Type'].unique())
-    selected_property_type = st.selectbox(
+    selected_property_type = st.multiselect(
         "Property Type", 
         property_type_options,
-        index=None
+        default=[]
     )
-    filter['Property_Type'] = selected_property_type
+    filter['Property_Type'] = selected_property_type if selected_property_type else None
 
 def bhk_filter(df):
     bhk_options = sorted(df['BHK'].unique())
@@ -64,7 +82,7 @@ def bhk_filter(df):
         "BHK", 
         min_value=int(min(bhk_options)),
         max_value=int(max(bhk_options)),
-        value=int(min(bhk_options))
+        value=(int(min(bhk_options)), int(max(bhk_options)))
     )
     filter['BHK'] = selected_bhk
 
@@ -77,3 +95,73 @@ def size_filter():
         step=100
     )
     filter['Size_in_SqFt'] = selected_size
+
+def price_filter():
+    selected_price = st.slider(
+        "Price (in Lakhs)", 
+        min_value=10,
+        max_value=500,
+        value=(10, 500),
+        step=10
+    )
+    filter['Price_in_Lakhs'] = selected_price
+
+def year_built_filter(df):
+    year_built_options = sorted(df['Year_Built'].unique())
+    selected_year_built = st.slider(
+        "Year Built", 
+        min_value=int(min(year_built_options)),
+        max_value=int(max(year_built_options)),
+        value=(int(min(year_built_options)), int(max(year_built_options)))
+    )
+    filter['Year_Built'] = selected_year_built
+
+def total_floors_filter(df):
+    total_floors_options = sorted(df['Total_Floors'].unique())
+    selected_total_floors = st.slider(
+        "Total Floors", 
+        min_value=int(min(total_floors_options)),
+        max_value=int(max(total_floors_options)),
+        value=(int(min(total_floors_options)), int(max(total_floors_options)))
+    )
+    filter['Total_Floors'] = selected_total_floors
+
+def school_filter(df):
+    school_options = sorted(df['Total_Nearby_Schools'].unique())
+    selected_total_nearby_schools = st.slider(
+        "Total Nearby Schools", 
+        min_value=int(min(school_options)),
+        max_value=int(max(school_options)),
+        value=(int(min(school_options)), int(max(school_options)))
+    )
+    filter['Total_Nearby_Schools'] = selected_total_nearby_schools
+
+def hospital_filter(df):
+    hospital_options = sorted(df['Total_Nearby_Hospitals'].unique())
+    selected_total_nearby_hospitals = st.slider(
+        "Total Nearby Hospitals", 
+        min_value=int(min(hospital_options)),
+        max_value=int(max(hospital_options)),
+        value=(int(min(hospital_options)), int(max(hospital_options)))
+    )
+    filter['Total_Nearby_Hospitals'] = selected_total_nearby_hospitals
+
+def public_transport_filter(df):
+    public_transport_options = sorted(df['Public_Transport_Accessibility'].unique())
+    selected_distance_to_public_transport = st.multiselect(
+        "Distance to Public Transport (in meters)", 
+        public_transport_options,
+        default=[]
+    )
+    filter['Public_Transport_Accessibility'] = selected_distance_to_public_transport if selected_distance_to_public_transport else None
+
+
+def parking_filter(df):
+    selected_parking = st.selectbox(
+        "Parking Availability",
+        options=['Yes', 'No'],
+        index=None
+    )
+    filter['Parking_Space'] = selected_parking
+
+

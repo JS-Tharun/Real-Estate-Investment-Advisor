@@ -17,3 +17,4 @@ def load_data(filter_dict):
             else:
                 data = data[data[key] == value]
     return data
+
