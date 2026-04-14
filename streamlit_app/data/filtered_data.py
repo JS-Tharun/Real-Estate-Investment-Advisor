@@ -7,5 +7,13 @@ def load_data(filter_dict):
     # Apply filters from the filter dictionary
     for key, value in filter_dict.items():
         if value is not None:
-            data = data[data[key] == value]
+            # Handle range filters (tuples)
+            if isinstance(value, tuple):
+                data = data[(data[key] >= value[0]) & (data[key] <= value[1])]
+            # Handle multiselect filters (lists)
+            elif isinstance(value, list):
+                data = data[data[key].isin(value)]
+            # Handle single value filters
+            else:
+                data = data[data[key] == value]
     return data
