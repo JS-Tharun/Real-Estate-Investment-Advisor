@@ -10,15 +10,15 @@ def sidebar_filters():
         return data
     df = filter_load_data()
 
-    st.write("# Filters")
+    st.write("# 🔍 Filters")
 
-    st.write("## Location Filters")
+    st.write("## 📍 Location Filters")
     state_filter(df)
     city_filter(df[df['State'] == filter.get('State', df['State'].iloc[0])])
     locality_filter(df)
 
     st.divider()
-    st.write("## Property Details")
+    st.write("## 🏠 Property Details")
     price_filter()
     size_filter()
     bhk_filter(df)
@@ -27,13 +27,13 @@ def sidebar_filters():
     total_floors_filter(df)
 
     st.divider()
-    st.write("## Nearby Facilities")
+    st.write("## 🏥 Nearby Facilities")
     school_filter(df)
     hospital_filter(df)
     public_transport_filter(df)
 
     st.divider()
-    st.write("## Amenities")
+    st.write("## 🛋️ Amenities")
     parking_filter(df)
     secutity_filter(df)
     clubhouse_filter(df)

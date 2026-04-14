@@ -17,7 +17,8 @@ with st.sidebar:
 # Filtered Data based on sidebar filters 
 df = load_data(filter)
 
-st.write("# Dashboard")
+st.write("# 🏠 Real Estate Investment Dashboard")
+st.write("### 📊 Analyze property prices, locations, and investment opportunities")
 
 price_size_analysis, location_analysis,investment_ownership, feature_rel_corr  = st.tabs([
     "Price & Size", "Location",  "Investment & Ownership", "Feature & Amenity Relationships"
