@@ -1,0 +1,65 @@
+price_prediction.ipynb - Cell-by-Cell Summary
+
+1. Markdown: Notebook title "Future Property Price Prediction" establishes the project purpose.
+2. Python: Imports libraries for warnings suppression, environment loading, data handling, plotting, feature selection, preprocessing, modeling, metrics, MLflow, and Dagshub.
+3. Python: Loads the dataset from 'Datasets/Future_Price.csv' into a pandas DataFrame.
+4. Python: Calls data.info() to inspect DataFrame shape, column types, and missing values.
+5. Markdown: Section header for "Domain Data Validation".
+6. Python: Displays descriptive statistics for all columns to validate data distributions and values.
+7. Python: Filters out invalid rows where floor number exceeds total floors.
+8. Markdown: Section header for "Data Preprocessing".
+9. Python: Converts binary categorical columns 'Parking_Space' and 'Security' from Yes/No to 1/0.
+10. Markdown: Section header for "Feature Correlation with Target Variable".
+11. Python: Computes numeric correlation matrix and plots a heatmap to visualize feature relationships.
+12. Markdown: Section header for "Feature Variable and Target variable".
+13. Python: Defines feature matrix X by dropping irrelevant columns and sets target y to 'Future_Price_5Y'.
+14. Markdown: Section header for "Feature selection using Mutual Information".
+15. Python: Contains commented-out code for computing mutual information regression scores for feature importance.
+16. Python: Contains commented-out code for plotting mutual information scores as a horizontal bar chart.
+17. Markdown: Section header for "Linear Regression".
+18. Markdown: Section header for "Data Preprocessing Pipeline".
+19. Python: Defines custom preprocessing transformers for location encoding and target-smoothed encoding, plus categorical, standard scaling, ordinal, and passthrough pipelines.
+20. Markdown: Section header for "Final Model Pipeline".
+21. Python: Categorizes features into binary, numeric, categorical, target-encoded location, and ordinal groups; builds a ColumnTransformer and final LinearRegression pipeline.
+22. Markdown: Section header for "Ridge Regression".
+23. Python: Builds a Ridge regression pipeline using the same preprocessing, defines a hyperparameter grid, and sets up GridSearchCV.
+24. Markdown: Section header for "Lasso Regression".
+25. Python: Builds a Lasso regression pipeline, defines its alpha grid, and sets up GridSearchCV.
+26. Markdown: Section header for "Tree-Based Regression Models".
+27. Markdown: Section header for "Feature Selection" in tree-based models.
+28. Python: Rebuilds feature category lists for tree-based models with binary, numeric, categorical, target, and ordinal separation.
+29. Markdown: Section header for "Decision Tree Regressor".
+30. Python: Defines a decision tree regression pipeline with tree preprocessing and model hyperparameters.
+31. Markdown: Section header for "Random Forest Regressor".
+32. Python: Defines a random forest regression pipeline with the same preprocessing and forest hyperparameters.
+33. Markdown: Section header for "XGBoost Regressor".
+34. Python: Defines an XGBoost regression pipeline with boosting hyperparameters and preprocessing.
+35. Markdown: Section header for "Model Performance Visualization".
+36. Python: Defines helper functions to plot actual vs predicted and residual plots, saving images to local folders.
+37. Markdown: Section header for "Training and Testing Data".
+38. Python: Splits X and y into training and testing sets using an 80/20 split.
+39. Markdown: Section header for "Tracking Model Experiments using MLFlow".
+40. Python: Creates a list of model definitions and associated training/test data for six models.
+41. Python: Trains each model, computes train/test R2, MAE, and RMSE, and stores the metrics.
+42. Markdown: Section header for "Dagshub Connection".
+43. Python: Initializes Dagshub integration with repository owner and name for MLflow tracking.
+44. Python: Loads environment variables, configures MLflow tracking, logs training data, tags, params, metrics, models, and plots for each model run.
+45. Markdown: Section header for "Model Registration".
+46. Python: Commented-out code showing how to register a trained model in MLflow.
+47. Markdown: Section header for "Load and Test the Model".
+48. Python: Commented-out code showing how to load a registered model and predict on test data.
+49. Markdown: Section header for "Transition the Model to Production".
+50. Python: Commented-out code demonstrating model aliasing and promotion in MLflow.
+51. Markdown: Section header for "Testing Production Model".
+52. Python: Commented-out code demonstrating loading a production alias model and scoring it.
+53. Markdown: Section header for "Model Feature Importance".
+54. Python: Commented-out code to load a registered model for feature importance analysis.
+55. Python: Commented-out code to reconstruct feature names and map XGBoost feature importances back to input features.
+56. Markdown: Section header for "Mutual Information Gain".
+57. Python: Commented-out code to recompute mutual information scores for features.
+58. Python: Commented-out code to compute feature ranking from MI scores.
+59. Python: Commented-out code to plot MI scores again.
+60. Markdown: Section header for "Confidence Score for the model prediction".
+61. Python: Re-initializes Dagshub, loads environment variables, and prepares credentials for MLflow.
+62. Python: Loads champion production models, makes a one-row prediction ensemble, computes mean prediction, standard deviation, and a confidence score with interval bounds.
+63. Python: Prints the ensemble prediction, expected range, and confidence label.
