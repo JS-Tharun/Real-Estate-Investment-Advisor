@@ -55,3 +55,62 @@ def property_size_price_plot(df):
     fig = px.box(size_price_df, x='Size_Bucket', y='Price_in_Lakhs')
     st.plotly_chart(fig)
     
+def price_furnished_chart(df):
+    st.write("### Price by Furnishing Status")
+    st.caption("Average price difference between furnished and unfurnished properties")
+    df_price = df.groupby('Furnished_Status')['Price_in_Lakhs'].agg(['mean', 'median', 'count']).reset_index()
+    st.bar_chart(
+        df_price,
+        x='Furnished_Status',
+        y='mean',
+        y_label="Average Price (₹ in Lakhs)"
+    )
+
+def price_city_furnished_chart(df):
+    st.write("### Price by Furnishing Status across Cities")
+    st.caption("Average price difference between furnished and unfurnished properties across different cities")
+    # Property price based on Furnishing Status for each city
+    df_price = df.groupby(['Furnished_Status', 'City'])['Price_in_Lakhs'].agg('mean').reset_index()
+    fig = px.bar(
+        df_price, 
+        x='City', 
+        y='Price_in_Lakhs', 
+        color='Furnished_Status', 
+        barmode='group',
+        labels={'Price_in_Lakhs': 'Average Price (₹ in Lakhs)'}
+    )
+    st.plotly_chart(fig)
+
+def price_direction(df):
+    st.write("### Price by Direction Facing")
+    st.caption("Average price difference based on direction facing")
+    df_facing = df.groupby('Direction_Facing')['Price_per_SqFt_in_Lakhs'].mean().reset_index(name='Avg_Price_per_SqFt')
+    st.bar_chart(
+        df_facing.set_index('Direction_Facing')['Avg_Price_per_SqFt'],
+        x_label="Direction Facing",
+        y_label="Average Price (₹ in Lakhs)"
+    )
+
+def price_state_direction(df):
+    st.write("### Price by Direction Facing across States")
+    st.caption("Average price difference based on direction facing across different states")
+    df_facing = df.groupby(['State', 'Direction_Facing'])['Price_per_SqFt_in_Lakhs'].mean().reset_index(name='Avg_Price_per_SqFt')
+    fig = px.bar(
+        df_facing, 
+        x='State', 
+        y='Avg_Price_per_SqFt', 
+        color='Direction_Facing', 
+        barmode='group',
+        labels={'Avg_Price_per_SqFt': 'Average Price per SqFt (₹ in Lakhs)'}
+    )
+    st.plotly_chart(fig)
+
+def price_parking_chart(df):
+    st.write("### Price by Parking Availability")
+    st.caption("Average price difference based on parking availability")
+    df_parking = df.groupby('Parking_Space')['Price_in_Lakhs'].mean().reset_index(name='Avg_Price')
+    st.bar_chart(
+        df_parking.set_index('Parking_Space')['Avg_Price'],
+        x_label="Parking Availability",
+        y_label="Average Price (₹ in Lakhs)"
+    )

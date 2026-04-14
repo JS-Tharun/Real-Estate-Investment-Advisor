@@ -1,12 +1,12 @@
 import streamlit as st
-import seaborn as sns
 import matplotlib.pyplot as plt
+import plotly.express as px
 
-def feature_correlation_heatmap(df):
-    st.write("### Feature Correlation Heatmap")
-    st.caption("Correlation between different features in the dataset")
+def feature_relationship_plots(df):
+    st.write("### Feature Relationships")
+    st.caption("Scatter plots showing relationships between features")
     df_numeric = df.select_dtypes(include='number')
-    df_numeric.drop('ID', axis=1, inplace=True)
-    fig, ax = plt.subplots(figsize=(10, 8))
-    sns.heatmap(df_numeric.corr(numeric_only=True), annot=True, fmt='.2f', cmap='YlGnBu')
-    st.pyplot(fig)
+    df_numeric.drop(columns=['ID', 'Future_Price_5Y'], axis=1, inplace=True)
+    fig = px.imshow(df_numeric.corr(), text_auto=".2f", width=1000, height=800)
+    st.plotly_chart(fig, config={"responsive": True})
+
