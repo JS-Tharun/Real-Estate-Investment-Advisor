@@ -27,17 +27,20 @@ def sidebar_filters():
     total_floors_filter(df)
 
     st.divider()
-    st.write("## Nearby Amenities")
+    st.write("## Nearby Facilities")
     school_filter(df)
     hospital_filter(df)
     public_transport_filter(df)
 
     st.divider()
     st.write("## Amenities")
-
-    
-    
-    
+    parking_filter(df)
+    secutity_filter(df)
+    clubhouse_filter(df)
+    garden_filter(df)
+    gym_filter(df)
+    playground_filter(df)
+    pool_filter(df)
     
 
 def state_filter(df):
@@ -160,8 +163,61 @@ def parking_filter(df):
     selected_parking = st.selectbox(
         "Parking Availability",
         options=['Yes', 'No'],
-        index=None
+        index=None,
+        placeholder='All'
     )
     filter['Parking_Space'] = selected_parking
 
+def secutity_filter(df):
+    selected_security = st.selectbox(
+        "Security Features",
+        options=['Yes', 'No'],
+        index=None,
+        placeholder='All'
+    )
+    filter['Security'] = selected_security
 
+def clubhouse_filter(df):
+    selected_clubhouse = st.selectbox(
+        "Clubhouse Availability",
+        options=['Yes', 'No'],
+        index=None,
+        placeholder='All'
+    )
+    filter['Clubhouse'] = selected_clubhouse
+
+def garden_filter(df):
+    selected_garden = st.selectbox(
+        "Garden Availability",
+        options=['Yes', 'No'],
+        index=None,
+        placeholder='All'
+    )
+    filter['Garden'] = selected_garden
+
+def gym_filter(df):
+    selected_gym = st.selectbox(
+        "Gym Availability",
+        options=['Yes', 'No'],
+        index=None,
+        placeholder='All'
+    )
+    filter['Gym'] = selected_gym
+
+def playground_filter(df):
+    selected_playground = st.selectbox(
+        "Playground Availability",
+        options=['Yes', 'No'],
+        index=None,
+        placeholder='All'
+    )
+    filter['Playground'] = selected_playground
+
+def pool_filter(df):
+    selected_pool = st.selectbox(
+        "Pool Availability",
+        options=['Yes', 'No'],
+        index=None,
+        placeholder='All'
+    )
+    filter['Pool'] = selected_pool
