@@ -4,6 +4,7 @@ import numpy as np
 from data.filtered_data import load_data
 from tab_components.price_and_size import price_distribution_chart, size_distribution_chart, property_type_chart, property_size_price_plot
 from tab_components.location import price_per_sqft_state_chart, price_city, median_age_locality_chart, bhk_dis_city, top_localities_chart
+from tab_components.feature_relationship import feature_correlation_heatmap
 from utils.filters import filter, sidebar_filters
 
 
@@ -52,4 +53,6 @@ with location_analysis:
     with st.container(border=True):
         bhk_dis_city(df)
         
-
+with feature_rel_corr:
+    with st.container(border=True):
+        feature_correlation_heatmap(df)
