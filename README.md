@@ -25,28 +25,6 @@ It combines:
 
 ---
 
-## 🗂️ Project Structure
-
-```
-├── Datasets/
-│   └── Future_Price.csv
-├── notebooks/
-│   └── price_prediction.ipynb
-├── plots/
-│   ├── actual_vs_predicted/
-│   └── residuals/
-├── models/
-├── src/
-│   ├── preprocessing.py
-│   ├── pipelines.py
-│   └── utils.py
-├── .env
-├── requirements.txt
-└── README.md
-```
-
----
-
 ## 📊 Dataset
 
 The dataset contains real estate features such as:
@@ -202,43 +180,9 @@ jupyter notebook
 
 ---
 
-## 🎯 Use Case
-
-* Property investment analysis
-* Price forecasting
-* Real estate decision support systems
-* Integration into web apps (e.g., Streamlit / FlutterFlow)
-
----
-
-## 💡 Future Improvements
-
-* Add deep learning models
-* Deploy as API (FastAPI / Flask)
-* Integrate with frontend (Streamlit / Web App)
-* Real-time data ingestion
-* Feature importance dashboard
-
----
-
 ## 🤝 Contributing
 
 Feel free to fork the repo and submit pull requests.
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
-## ⭐ Acknowledgements
-
-* Scikit-learn
-* XGBoost
-* MLflow
-* DagsHub
 
 ---
 
@@ -247,4 +191,4 @@ This project is licensed under the MIT License.
 For queries or collaboration:
 
 * GitHub: your-username
-* Email: [your-email@example.com](mailto:your-email@example.com)
+* Email: [tharunjs06@gmail.com](mailto:tharunjs06@gmail.com)
