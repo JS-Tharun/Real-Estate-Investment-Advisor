@@ -31,7 +31,7 @@ mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
 # ----------------------------------------------------------------------
-# Load the champion model from MLflow and cache it for Streamlit
+# Load the champion models from MLflow and cache it for Streamlit
 # ----------------------------------------------------------------------
 
 @st.cache_resource
