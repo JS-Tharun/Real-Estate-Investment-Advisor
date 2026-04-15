@@ -11,7 +11,8 @@ from dotenv import load_dotenv
 # Load the dataset
 #----------------------------------------------------------------------
 
-dataframe = pd.read_csv("../Datasets/Future_Price.csv")
+dataframe = pd.read_csv("../Datasets/Property_Investment.csv")
+
 
 # ----------------------------------------------------------------------
 # Initialize DagsHub connection and MLflow tracking
@@ -27,19 +28,21 @@ load_dotenv()
 os.environ['MLFLOW_TRACKING_USERNAME'] = f"{os.getenv('DAGSHUB_USERNAME')}"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = f"{os.getenv('DAGSHUB_PASSWORD')}"
 
-mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
+mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_ADV"])
 mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
 
+
+
 # ----------------------------------------------------------------------
-# Load the champion model from MLflow and cache it for Streamlit
+# Load the champion models from MLflow and cache it for Streamlit
 # ----------------------------------------------------------------------
 
 @st.cache_resource
 def load_champion_model():
-    prod_model = ["XGBoost_Price_Pred", "RF_Price_Pred_Prod", "DT_Price_Pred_Prod"]
+    prod_models = ["XGB_Inv_Advisor", "RF_Inv_Advisor", "DT_Inv_Advisor"]
     models = []
 
-    for model in prod_model:
+    for model in prod_models:
         model_uri = f"models:/{model}@champion"
         loaded_model = mlflow.pyfunc.load_model(model_uri)
         models.append(loaded_model)
@@ -48,26 +51,26 @@ def load_champion_model():
 with st.spinner("Loading Models...."):
     loaded_models = load_champion_model()
 
+
 #----------------------------------------------------------------------
 # Streamlit App Configuration
 #----------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="Future Property Price Prediction",
+    page_title="Investment Advisor",
     layout="wide"
 )
 
-# Main container for structured layout
 with st.container():
-    st.title("🔮 Future Property Price Predictor")
-    st.markdown("Enter the property details below to predict the future price. Use the form to input information and get predictions.")
+    st.title("Property Investment Advisor")
+    st.markdown("Enter the property details below to identify whether it is a good investment or not.")
 
 # Form container with grid-based layout
-with st.form("Price Prediction Form"):
+with st.form("Investment Advisor Form"):
     # Location Section - Card-like container
     with st.container(border=True):
         st.subheader("📍 Location Details")
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
             city_values = dataframe["City"].sort_values().unique()
             city_selection = st.selectbox(
@@ -79,6 +82,12 @@ with st.form("Price Prediction Form"):
             locality_selection = st.selectbox(
                 label="Locality",
                 options=locality_values
+            )
+        with col3:
+            direction_values = dataframe["Direction_Facing"].unique()
+            direction_selection = st.selectbox(
+                label="Direction Facing",
+                options=direction_values
             )
 
     st.markdown("")  # Spacer
@@ -94,13 +103,24 @@ with st.form("Price Prediction Form"):
                 options=property_type_values
             )
         with col2:
-            bhk_selection = st.number_input(
-                label="BHK",
-                min_value=1,
-                max_value=5,
-                step=1
+            furnishing_status_values = dataframe["Furnished_Status"].unique()
+            furnishing_status_selection = st.selectbox(
+                label="Furnished Status",
+                options=furnishing_status_values
             )
+
         with col3:
+            price_selection = st.slider(
+                "Price (₹ in lakhs)",
+                min_value = dataframe['Price_in_Lakhs'].min(),
+                max_value = dataframe['Price_in_Lakhs'].max(),
+                value = 30.0,
+                step = 0.1
+            )
+        
+
+        col1, col2, col3 = st.columns(3)        
+        with col1:
             size_selection = st.number_input(
                 label="Size (in sqft)",
                 min_value=500,
@@ -109,64 +129,23 @@ with st.form("Price Prediction Form"):
                 step=100
             )
 
-        col1, col2 = st.columns(2)
-        with col1:
-            price_per_sqft_selection = st.number_input(
-                label="Price per sqft (in Lakhs)",
-                min_value=0.001,
-                max_value=1.0,
-                value=1.0,
-                step=0.1
-            )
         with col2:
-            furnishing_status_values = dataframe["Furnished_Status"].unique()
-            furnishing_status_selection = st.selectbox(
-                label="Furnished Status",
-                options=furnishing_status_values
-            )
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            direction_values = dataframe["Direction_Facing"].unique()
-            direction_selection = st.selectbox(
-                label="Direction Facing",
-                options=direction_values
-            )
-        with col2:
-            floor_selection = st.number_input(
-                label="Floor Number",
-                min_value=0,
-                max_value=30,
-                step=1
-            )
-        with col3:
-            total_floors_selection = st.number_input(
-                label="Total Floors",
+            bhk_selection = st.number_input(
+                label="BHK",
                 min_value=1,
-                max_value=30,
+                max_value=5,
                 step=1
             )
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
+            
+    
+        with col3:
             age_selection = st.number_input(
                 label="Age of Property (years)",
                 min_value=0,
                 max_value=50,
                 step=1
             )
-        with col2:
-            owner_type_values = dataframe["Owner_Type"].unique()
-            owner_type_selection = st.selectbox(
-                label="Owner Type",
-                options=owner_type_values
-            )
-        with col3:
-            availability_values = dataframe["Availability_Status"].unique()
-            availability_selection = st.selectbox(
-                label="Availability Status",
-                options=availability_values
-            )
+        
 
     st.markdown("")  # Spacer
 
@@ -230,27 +209,23 @@ with st.form("Price Prediction Form"):
     # Submit Button - Centered in a row
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        submit_button = st.form_submit_button(label="🔮 Predict Future Price", use_container_width=True)
+        submit_button = st.form_submit_button(label="🔮 Invest?", use_container_width=True)
 
-# Prediction Results - Outside form, in a container
+
 if submit_button:
     with st.container(border=True):
         st.subheader("🔮 Prediction Results")
-        with st.spinner("Predicting future price..."):
+        with st.spinner("Should You Investment..."):
             X = pd.DataFrame([{
                 "City": city_selection,
                 "Locality": locality_selection,
                 "Property_Type": property_type_selection,
                 "BHK": bhk_selection,
                 "Size_in_SqFt": size_selection,
-                "Price_per_SqFt_in_Lakhs": price_per_sqft_selection,
+                "Price_in_Lakhs": price_selection,
                 "Furnished_Status": furnishing_status_selection,
                 "Direction_Facing": direction_selection,
-                "Floor_No": floor_selection,
-                "Total_Floors": total_floors_selection,
                 "Age_of_Property": age_selection,
-                "Owner_Type": owner_type_selection,
-                "Availability_Status": availability_selection,
                 "Total_Nearby_Schools": total_schools_selection,
                 "Total_Nearby_Hospitals": total_hospitals_selection,
                 "Public_Transport_Accessibility": public_transport_score_selection,
@@ -263,54 +238,18 @@ if submit_button:
                 "Pool": swimming_pool_selection
             }])
 
-            # -----------------------------------------------------------------------
+            #----------------------------------------------------------------------------------
             # Prediction using production models
-            # -----------------------------------------------------------------------
-
-            mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME_REG"])
-            mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
+            #----------------------------------------------------------------------------------
 
             predictions = []
             for model in loaded_models:
                 y_pred = model.predict(X)
                 predictions.append(y_pred)
 
-            mean_pred = np.mean(predictions, axis=0)
-            std_dev = np.std(predictions, axis=0)
-
-            confidence = 1 / (1 + (std_dev / mean_pred))
-            lower = mean_pred - 2 * std_dev
-            upper = mean_pred + 2 * std_dev
-
-            def confidence_label(conf):
-                if conf > 0.8:
-                    return "High"
-                elif conf > 0.6:
-                    return "Medium"
-                else:
-                    return "Low"
-
-            conf_value = float(confidence[0])
-            conf_pct = round(conf_value * 100, 2)
-            conf_tier = confidence_label(conf_value)
-
-            st.success(f"**Predicted Future Price: ₹{mean_pred[0]:,.2f} Lakhs**")
-            st.info(f"**Confidence: {conf_tier} ({conf_pct}%)**")
-            st.warning(f"**Expected Price Interval: ₹{lower[0]:,.2f} - ₹{upper[0]:,.2f} Lakhs**")
-
-st.markdown("")  # Spacer
-
-# ----------------------------------------------------------------------
-# Display Feature Importance
-# ----------------------------------------------------------------------
-
-with open('data/reg_feature_score.json', 'r') as file:
-    feature_data = json.load(file)
-
-feature_df = pd.DataFrame(list(feature_data.items()), columns=["Feature", "Ranking"])
-
-with st.container(border=True):
-    st.subheader("📊 Feature Importance")
-    st.dataframe(feature_df)
-
-
+            # Majority voting (mode across rows)
+            final_prediction = np.round(np.mean(predictions, axis=0)).astype(int)
+            if final_prediction[0] == 1:
+                st.success("Good Investment")
+            else:
+                st.warning("Bad Investment")
