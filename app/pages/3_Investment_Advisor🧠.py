@@ -7,6 +7,12 @@ import json
 import numpy as np
 from dotenv import load_dotenv
 
+
+st.set_page_config(
+    page_title="Investment Advisor",
+    layout="wide"
+)
+
 #----------------------------------------------------------------------
 # Load the dataset
 #----------------------------------------------------------------------
@@ -56,10 +62,7 @@ with st.spinner("Loading Models...."):
 # Streamlit App Configuration
 #----------------------------------------------------------------------
 
-st.set_page_config(
-    page_title="Investment Advisor",
-    layout="wide"
-)
+
 
 with st.container():
     st.title("Property Investment Advisor")

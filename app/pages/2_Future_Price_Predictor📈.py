@@ -7,6 +7,11 @@ import json
 import numpy as np
 from dotenv import load_dotenv
 
+st.set_page_config(
+    page_title="Future Property Price Prediction",
+    layout="wide"
+)
+
 #----------------------------------------------------------------------
 # Load the dataset
 #----------------------------------------------------------------------
@@ -52,10 +57,6 @@ with st.spinner("Loading Models...."):
 # Streamlit App Configuration
 #----------------------------------------------------------------------
 
-st.set_page_config(
-    page_title="Future Property Price Prediction",
-    layout="wide"
-)
 
 # Main container for structured layout
 with st.container():

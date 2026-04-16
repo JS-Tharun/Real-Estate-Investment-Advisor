@@ -1,8 +1,8 @@
-# 🏠 Future Property Price Prediction & Investment Advisor
+# 🏠 Real Estate Investment Advisor: Predicting Property Profitability & Future Value
 
 ## 📌 Overview
 
-This project is an end-to-end Machine Learning system designed to **predict future real estate prices (5-year horizon)** and assist users in evaluating whether a property is a **good investment**.
+This project is designed as an end-to-end real estate decision-support platform that helps users move from exploration → prediction → decision-making:
 
 It combines:
 

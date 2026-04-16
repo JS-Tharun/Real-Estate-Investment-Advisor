@@ -8,7 +8,10 @@ from tab_components.feature_relationship import feature_relationship_plots
 from tab_components.investment_ownership import owner_type_count, prop_availability, price_public_transport
 from utils.filters import filter, sidebar_filters
 
-
+st.set_page_config(
+    page_title="Analysis Dashboard",
+    layout="wide"
+)
     
 # Load sidebar first to set filters
 with st.sidebar:

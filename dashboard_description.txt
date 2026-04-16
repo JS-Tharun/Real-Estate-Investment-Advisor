@@ -1,0 +1,33 @@
+Code Description for 1_Dashboard📊.py
+
+This file is a Streamlit application for a Real Estate Investment Dashboard. It provides an interactive dashboard with filters and multiple tabs for analyzing property data through various charts and visualizations.
+
+Section 1: Imports
+Imports necessary libraries: streamlit, pandas, numpy. Also imports custom modules for data loading, tab components (charts), and utility filters.
+
+Section 2: Page Configuration
+Sets the Streamlit page title to "Analysis Dashboard" and layout to wide.
+
+Section 3: Sidebar Filters
+Loads and displays sidebar filters using the sidebar_filters() function to allow users to filter the data.
+
+Section 4: Load Filtered Data
+Loads the filtered dataset using load_data(filter) based on the sidebar selections, storing it in 'df'.
+
+Section 5: Dashboard Title and Description
+Displays the main title "🏠 Real Estate Investment Dashboard" and a subtitle describing the purpose of analyzing property prices, locations, and investment opportunities.
+
+Section 6: Create Tabs
+Creates four tabs: "Price & Size", "Location", "Investment & Ownership", "Feature & Amenity Relationships".
+
+Section 7: Price & Size Tab
+In the first tab, arranges charts in columns: price distribution chart, price by direction chart, property size vs price plot, price by parking chart, size distribution chart, property type chart, price by furnished status chart.
+
+Section 8: Location Tab
+In the location tab, displays: property availability by city chart, top localities chart, price by city chart, median age by locality chart, BHK distribution by city chart, price by city and furnished status chart, price by state and direction chart, price per sqft by state chart.
+
+Section 9: Feature & Amenity Relationships Tab
+In the feature relationships tab, displays feature relationship plots.
+
+Section 10: Investment & Ownership Tab
+In the investment and ownership tab, arranges in columns: owner type count chart, price by public transport chart, property availability chart.
