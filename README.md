@@ -4,12 +4,12 @@
 
 The project aims to reduce uncertainty in real estate decisions by combining data analysis, predictive modeling, and investment guidance into a single intelligent tool for buyers and investors.
 
-It combines:
+Use Case
 
-* Advanced feature engineering
-* Multiple regression models
-* Experiment tracking (MLflow + DagsHub)
-* Ensemble-based confidence scoring
+* ✅ Empower real estate investors with intelligent tools to assess long-term returns.
+* ✅ Support buyers in choosing high-return properties in developing areas.
+* ✅ Help real estate companies automate investment analysis for listings.
+* ✅ Improve customer trust in real estate platforms with data-backed predictions.
 
 ---
 
