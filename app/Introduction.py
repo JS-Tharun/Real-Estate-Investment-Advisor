@@ -29,9 +29,9 @@ def main():
 
             | Pages | Description |
             |-------|-------------|
-            | 📊 Analysis Dashboard | Visualize real estate trends and insights through interactive charts |
-            | 📈 Future Price Prediction | Predict property prices over the next 5 years using advanced models |
-            | 🧠 Investment Advisor | Identify whether a property is a good investment based on expected returns |
+            |  Analysis Dashboard 📊| Visualize real estate trends and insights through interactive charts |
+            |  Future Price Prediction 📈| Predict property prices over the next 5 years using advanced models |
+            |  Investment Advisor 🧠| Identify whether a property is a good investment based on expected returns |
 
             """
         )
