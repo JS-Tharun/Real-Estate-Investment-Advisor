@@ -30,7 +30,7 @@ The dataset contains real estate features such as:
 * Property Details: BHK, Size, Floor, Total Floors
 * Pricing: Price, Price per SqFt
 * Amenities: Parking, Security, etc.
-* Target: `Future_Price_5Y`
+* Target: `Future_Price_5Y` and `Investment`
 
 ---
 
@@ -62,6 +62,7 @@ The dataset contains real estate features such as:
 
 ## 🤖 Models Used
 
+### For Price Prediction
 ### Linear Models
 
 * Linear Regression
@@ -74,10 +75,16 @@ The dataset contains real estate features such as:
 * Random Forest Regressor
 * XGBoost Regressor
 
+### For Investment Advisor
+
+* Decision Tree Classifier
+* Random Forest Regressor
+* XGBoost Classifier
 ---
 
 ## 📉 Model Evaluation
 
+### Price Predictor
 Models are evaluated using:
 
 * R² Score
@@ -88,6 +95,13 @@ Visualizations:
 
 * Actual vs Predicted plots
 * Residual plots
+
+### For Investment Advisor
+* Classification Report
+* AUC Score
+
+Visualization:
+* AUC-ROC Curve
 
 ---
 
@@ -100,6 +114,7 @@ Integrated with:
 
 Tracks:
 
+* Datasets
 * Parameters
 * Metrics
 * Models
@@ -118,6 +133,7 @@ Tracks:
 
 ## 📈 Confidence Scoring (Advanced)
 
+### For Price Prediction
 An ensemble approach is used:
 
 * Multiple production models generate predictions
@@ -126,11 +142,16 @@ An ensemble approach is used:
 
   * Standard deviation of predictions
 
+### For Investment Advisor
+* Multiple production models generate predictions
+* Final Prediction = Most common outcome of all the models
+
 ### Output:
 
 * Predicted price
 * Prediction range (uncertainty interval)
 * Confidence score
+* Good Investment / Not Good Investment
 
 ---
 
