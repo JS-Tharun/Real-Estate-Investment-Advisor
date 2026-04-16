@@ -15,13 +15,10 @@ It combines:
 
 ## 🚀 Key Features
 
-* 📊 Predicts **Future Property Price (5 Years)**
-* 🧠 Uses multiple ML models (Linear + Tree-based)
-* ⚙️ Robust preprocessing pipelines
-* 📉 Model evaluation with visual diagnostics
-* 🧪 Experiment tracking using MLflow + DagsHub
-* 📦 Model versioning & production readiness
-* 📈 Confidence score using ensemble variance
+* Dashboard 📊 – Interactive dashboard with filters and visualizations to explore property trends, pricing patterns, and investment insights.
+* Future Price Predictor 🔮 – Predicts future property prices using ML models with confidence intervals based on user-input features.
+* Investment Advisor 🧠 – Recommends whether a property is a good investment using ensemble ML model predictions from user inputs.
+
 
 ---
 
