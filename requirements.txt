@@ -1,0 +1,12 @@
+dagshub
+mlflow
+numpy
+pandas
+plotly
+python-dotenv
+scikit-learn
+seaborn
+statsmodels
+streamlit
+xgboost
+matplotlib
