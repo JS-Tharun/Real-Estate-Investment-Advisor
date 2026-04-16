@@ -209,7 +209,7 @@ with st.form("Investment Advisor Form"):
     # Submit Button - Centered in a row
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        submit_button = st.form_submit_button(label="🔮 Invest?", use_container_width=True)
+        submit_button = st.form_submit_button(label="💡 Invest?", use_container_width=True)
 
 
 if submit_button:
@@ -250,6 +250,6 @@ if submit_button:
             # Majority voting (mode across rows)
             final_prediction = np.round(np.mean(predictions, axis=0)).astype(int)
             if final_prediction[0] == 1:
-                st.success("Good Investment")
+                st.success("📈 Good Investment")
             else:
-                st.warning("Bad Investment")
+                st.warning("📉 Bad Investment")
