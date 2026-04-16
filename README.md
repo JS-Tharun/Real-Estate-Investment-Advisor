@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-This project is designed as an end-to-end real estate decision-support platform that helps users move from exploration → prediction → decision-making:
+The project aims to reduce uncertainty in real estate decisions by combining data analysis, predictive modeling, and investment guidance into a single intelligent tool for buyers and investors.
 
 It combines:
 
