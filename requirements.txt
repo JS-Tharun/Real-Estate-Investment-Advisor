@@ -1,12 +1,21 @@
-dagshub
-mlflow
+# Core Data Processing Libraries
 numpy
 pandas
-plotly
-python-dotenv
+
+# Machine Learning Libraries
 scikit-learn
+xgboost
+mlflow
+dagshub
+
+# Visualization Libraries
+matplotlib
+plotly
 seaborn
 statsmodels
+
+# Web Framework
 streamlit
-xgboost
-matplotlib
+
+# Environment Configuration
+python-dotenv
